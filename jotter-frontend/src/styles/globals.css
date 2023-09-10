@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
+
+:root {
+    --light: #EEFDF7;
+    --dark: #74D9B4;
+    --darker: #529E83;
+}
+
+body {
+    margin: 0px !important;
+    background-color : var(--light) ;
+}
