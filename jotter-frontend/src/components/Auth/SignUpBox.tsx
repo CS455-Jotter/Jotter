@@ -10,7 +10,7 @@ import Input from '../Input/Input';
 
 function SignUpBox() {
   return (
-    <div style={{ width: '400px', height: '480px' }}>
+    <div style={{ width: '380px', height: '480px' }}>
       <Box
         sx={{
           width: '100%',
@@ -32,7 +32,7 @@ function SignUpBox() {
               alignContent="center"
               alignItems="center"
               spacing={3}
-              width="400px"
+              width="380px"
             >
               <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>SignUp</Typography>
               <Input placeholder="Email" />

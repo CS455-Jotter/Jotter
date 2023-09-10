@@ -1,21 +1,26 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import LoginBox from '@/components/Auth/LoginBox';
+import styles from '@/styles/login.module.css';
+import TypeWriter from '@/components/TypeWriter/TypeWriter';
 
 function Login() {
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: '100vh' }}
-    >
-      <Grid item xs={3}>
-        <LoginBox />
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        sx={{ minHeight: '100vh', justifyContent: { lg: 'space-around', xs: 'center' } }}
+      >
+        <Grid item className={styles.hide} lg={3}>
+          <TypeWriter />
+        </Grid>
+        <Grid item lg={3} sx={{ zIndex: 1000 }}>
+          <LoginBox />
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 }
 

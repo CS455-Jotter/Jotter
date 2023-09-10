@@ -11,7 +11,7 @@ import Input from '../Input/Input';
 
 function LoginBox() {
   return (
-    <div style={{ width: '400px', height: '480px' }}>
+    <div style={{ width: '380px', height: '480px' }}>
       <Box
         sx={{
           width: '100%',
@@ -33,7 +33,7 @@ function LoginBox() {
               alignContent="center"
               alignItems="center"
               spacing={3}
-              width="400px"
+              width="380px"
             >
               <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>Login</Typography>
               <Input placeholder="Email" />
@@ -53,23 +53,25 @@ function LoginBox() {
               >
                 <ArrowForwardIcon />
               </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: colorPalette.darker,
-                  width: '50%',
-                  borderRadius: '40px',
-                  ':hover': {
-                    bgcolor: colorPalette.darker,
-                    color: 'white',
-                  },
-                  fontFamily: 'Caveat',
-                  textTransform: 'none',
-                  fontSize: 15,
-                }}
-              >
-                <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>Not a user? Sign up</Link>
-              </Button>
+              <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: colorPalette.darker,
+                    width: '100%',
+                    borderRadius: '40px',
+                    ':hover': {
+                      bgcolor: colorPalette.darker,
+                      color: 'white',
+                    },
+                    fontFamily: 'Caveat',
+                    textTransform: 'none',
+                    fontSize: 18,
+                  }}
+                >
+                  Not a user? Sign up
+                </Button>
+              </Link>
             </Stack>
           </Grid>
         </Grid>

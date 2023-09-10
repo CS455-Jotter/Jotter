@@ -7,10 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import { Button } from '@mui/material';
+import Link from 'next/link';
 import colorPalette from '@/components/color/config';
 
 function TopBar() {
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -62,6 +64,27 @@ function TopBar() {
               <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>
           </div>
+          )}
+          {!auth && (
+            <Link href="/login" style={{ textDecoration: 'none', color: '#ffffff' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: colorPalette.darker,
+                  width: '150px',
+                  borderRadius: '40px',
+                  ':hover': {
+                    bgcolor: colorPalette.darker,
+                    color: 'white',
+                  },
+                  fontFamily: 'Caveat',
+                  textTransform: 'none',
+                  fontSize: 20,
+                }}
+              >
+                Login
+              </Button>
+            </Link>
           )}
         </Toolbar>
       </AppBar>
