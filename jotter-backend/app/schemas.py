@@ -8,6 +8,9 @@ class User(BaseModel):
     password : str
     saved_state : Optional[str] = None
 
+class State(BaseModel):
+    saved_state : str
+
 
 class UserOut(BaseModel):
     email : EmailStr
