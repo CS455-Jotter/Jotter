@@ -67,6 +67,7 @@ function LoginBox() {
                           empty: (value) => value !== '',
                         },
                       }}
+                      helperText="Not a valid email!"
                     />
                     <Input
                       placeholder="Password"
@@ -79,6 +80,7 @@ function LoginBox() {
                           empty: (value) => value !== '',
                         },
                       }}
+                      helperText="Minimum password length : 8 characters!"
                     />
                     <Button
                       variant="contained"

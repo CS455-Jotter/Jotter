@@ -67,6 +67,7 @@ function SignUpBox() {
                           empty: (value) => value !== '',
                         },
                       }}
+                      helperText="Not a valid email!"
                     />
                     <Input
                       placeholder="Password"
@@ -79,6 +80,7 @@ function SignUpBox() {
                           empty: (value) => value !== '',
                         },
                       }}
+                      helperText="Minimum password length : 8 characters!"
                     />
                     <Input
                       placeholder="Confirm Password"
@@ -91,6 +93,7 @@ function SignUpBox() {
                           empty: (value) => value !== '',
                         },
                       }}
+                      helperText="Passwords don't match!"
                     />
                     <Button
                       variant="contained"
