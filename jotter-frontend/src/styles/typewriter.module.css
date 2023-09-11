@@ -52,12 +52,12 @@
 .dynamic_text li{
     position: relative;
     top : 0;
-    animation: slide 9s steps(3) infinite;
+    animation: slide 15s steps(5) infinite;
 }
 
 @keyframes slide{
     100% {
-        top: -150px
+        top: -250px
     }
 }
 
@@ -66,7 +66,7 @@
     position: absolute;
     left: 0;
     height: 80%;
-    width: 50%;
+    width: 65%;
     border-left: 4px solid black;
     animation: typing 3s steps(10) infinite, blink .4s step-end infinite alternate;
     background-color: var(--light);
@@ -74,7 +74,7 @@
 
 @keyframes typing {
     40%, 60% {
-        left: calc(50%);
+        left: calc(65%);
     }
 
     100% {

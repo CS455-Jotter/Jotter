@@ -3,19 +3,16 @@ import styles from '@/styles/typewriter.module.css';
 
 function TypeWriter() {
   return (
-    // <div className={styles.wrapper}>
-    //   <div className={styles.typing}>
-    //     Hey, Welcome to Jotter. Your one place to jot down.
-    //   </div>
-    // </div>
     <div className={styles.wrapper}>
       <div className={styles.static_text}>
-        Hey, Welcome to Jotter.
+        Hey, Welcome to JOtter.
       </div>
       <div className={styles.dynamic_text}>
-        <li><span>Here you can jot down your notes.</span></li>
-        <li><span>Write down your ideas.</span></li>
-        <li><span>Do something out of the blue.</span></li>
+        <li><span>In a hurry? Just jot a note</span></li>
+        <li><span>Your thoughts, our canvas , let&apos;s create</span></li>
+        <li><span>Your words, your way, our text editor</span></li>
+        <li><span>Where ideas meet the blank canvas</span></li>
+        <li><span>Take a moment to jot your thoughts</span></li>
       </div>
     </div>
   );
