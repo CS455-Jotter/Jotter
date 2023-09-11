@@ -1,15 +1,26 @@
-import React from 'react';
-import Box from '@mui/material/Box';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   Button, Grid, Typography,
 } from '@mui/material';
+import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Link from 'next/link';
-import colorPalette from '../color/config';
+import { FormProvider, useForm } from 'react-hook-form';
 import Input from '../Input/Input';
+import colorPalette from '../color/config';
 
 function LoginBox() {
+  const methods = useForm();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = (data : any) => {
+    // eslint-disable-next-line no-console
+    console.log('Data: ');
+    // eslint-disable-next-line no-console
+    console.log(data);
+    methods.reset();
+  };
+
   return (
     <div style={{ width: '380px', height: '480px' }}>
       <Box
@@ -36,42 +47,77 @@ function LoginBox() {
               width="380px"
             >
               <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>Login</Typography>
-              <Input placeholder="Email" />
-              <Input placeholder="Password" password />
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  backgroundColor: colorPalette.darker,
-                  width: '50%',
-                  borderRadius: '40px',
-                  ':hover': {
-                    bgcolor: colorPalette.darker,
-                    color: 'white',
-                  },
-                }}
-              >
-                <ArrowForwardIcon />
-              </Button>
-              <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: colorPalette.darker,
-                    width: '100%',
-                    borderRadius: '40px',
-                    ':hover': {
-                      bgcolor: colorPalette.darker,
-                      color: 'white',
-                    },
-                    fontFamily: 'Caveat',
-                    textTransform: 'none',
-                    fontSize: 18,
-                  }}
-                >
-                  Not a user? Sign up
-                </Button>
-              </Link>
+              <FormProvider {...methods}>
+                <form onSubmit={methods.handleSubmit(onSubmit)}>
+                  <Stack
+                    direction="column"
+                    alignContent="center"
+                    alignItems="center"
+                    spacing={3}
+                    width="380px"
+                  >
+                    <Input
+                      placeholder="Email"
+                      name="email"
+                      rules={{
+                        requied: true,
+                        pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
+                        setValueAs: (value) => value.trim(),
+                        validate: {
+                          empty: (value) => value !== '',
+                        },
+                      }}
+                    />
+                    <Input
+                      placeholder="Password"
+                      password
+                      name="password"
+                      rules={{
+                        requied: true,
+                        minLength: 8,
+                        validate: {
+                          empty: (value) => value !== '',
+                        },
+                      }}
+                    />
+                    <Button
+                      variant="contained"
+                      size="large"
+                      sx={{
+                        backgroundColor: colorPalette.darker,
+                        width: '50%',
+                        borderRadius: '40px',
+                        ':hover': {
+                          bgcolor: colorPalette.darker,
+                          color: 'white',
+                        },
+                      }}
+                      type="submit"
+                    >
+                      <ArrowForwardIcon />
+                    </Button>
+                    <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: colorPalette.darker,
+                          width: '100%',
+                          borderRadius: '40px',
+                          ':hover': {
+                            bgcolor: colorPalette.darker,
+                            color: 'white',
+                          },
+                          fontFamily: 'Caveat',
+                          textTransform: 'none',
+                          fontSize: 18,
+                        }}
+                      >
+                        Not a user? Sign up
+                      </Button>
+                    </Link>
+                  </Stack>
+                </form>
+              </FormProvider>
             </Stack>
           </Grid>
         </Grid>
