@@ -6,18 +6,29 @@ import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
 import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import Input from '../Input/Input';
-import colorPalette from '../color/config';
+import colorPalette, { baseURL } from '../config/config';
 
 function LoginBox() {
   const methods = useForm();
-
+  const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data : any) => {
-    // eslint-disable-next-line no-console
-    console.log('Data: ');
-    // eslint-disable-next-line no-console
-    console.log(data);
+    const formData = new FormData();
+    formData.append('username', data.email);
+    formData.append('password', data.password);
+
+    axios.post(`${baseURL}/login`, formData)
+      .then((res) => {
+        localStorage.setItem('access_token', res.data.access_token);
+        router.push('/');
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      });
     methods.reset();
   };
 
@@ -67,7 +78,7 @@ function LoginBox() {
                           empty: (value) => value !== '',
                         },
                       }}
-                      helperText="Not a valid email!"
+                      helperText="Incorrect email!"
                     />
                     <Input
                       placeholder="Password"
@@ -75,12 +86,11 @@ function LoginBox() {
                       name="password"
                       rules={{
                         requied: true,
-                        minLength: 8,
                         validate: {
                           empty: (value) => value !== '',
                         },
                       }}
-                      helperText="Minimum password length : 8 characters!"
+                      helperText="Incorrect password!"
                     />
                     <Button
                       variant="contained"

@@ -6,7 +6,8 @@ import {
 import { Stack } from '@mui/system';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useForm, FormProvider } from 'react-hook-form';
-import colorPalette from '../color/config';
+import axios from 'axios';
+import colorPalette, { baseURL } from '../config/config';
 import Input from '../Input/Input';
 
 function SignUpBox() {
@@ -14,10 +15,15 @@ function SignUpBox() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data : any) => {
-    // eslint-disable-next-line no-console
-    console.log('Data: ');
-    // eslint-disable-next-line no-console
-    console.log(data);
+    axios.post(`${baseURL}/users`, data)
+      .then((res) => {
+        // eslint-disable-next-line no-console
+        console.log(res);
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      });
     methods.reset();
   };
 

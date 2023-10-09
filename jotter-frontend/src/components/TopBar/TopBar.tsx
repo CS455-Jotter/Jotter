@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import colorPalette from '@/components/color/config';
+import colorPalette from '@/components/config/config';
 
 function TopBar() {
   const [auth, setAuth] = React.useState(false);
