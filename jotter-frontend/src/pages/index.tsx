@@ -1,10 +1,14 @@
 import * as React from 'react';
+import Head from 'next/head';
 import Layout from '@/components/Layout/Layout';
 import TextEditor from '@/components/TextEditor/TextEditor';
 
 export default function MenuAppBar() {
   return (
     <div>
+      <Head>
+        <title>JOtter</title>
+      </Head>
       <TextEditor />
     </div>
   );
