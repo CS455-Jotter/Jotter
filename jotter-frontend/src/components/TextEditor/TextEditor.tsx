@@ -64,6 +64,7 @@ function TextEditor() {
                 backgroundColor: colorPalette.white,
                 width: '290px',
                 height: '50px',
+                border: '1px solid black',
               }}
             >
               <MenuItem value="Calibri">Calibri</MenuItem>
@@ -80,6 +81,7 @@ function TextEditor() {
               style={{
                 backgroundColor: colorPalette.white,
                 height: '50px',
+                border: '1px solid black',
               }}
             >
               <MenuItem value={10}>10</MenuItem>
@@ -96,7 +98,10 @@ function TextEditor() {
               onChange={() => {
                 setIsBold(!isBold);
               }}
-              style={{ backgroundColor: isBold ? colorPalette.grey : colorPalette.white }}
+              style={{
+                backgroundColor: isBold ? colorPalette.grey : colorPalette.white,
+                border: '2px solid black',
+              }}
             >
               <FormatBoldIcon />
             </ToggleButton>
@@ -106,7 +111,10 @@ function TextEditor() {
               onChange={() => {
                 setIsItalic(!isItalic);
               }}
-              style={{ backgroundColor: isItalic ? colorPalette.grey : colorPalette.white }}
+              style={{
+                backgroundColor: isItalic ? colorPalette.grey : colorPalette.white,
+                border: '2px solid black',
+              }}
             >
               <FormatItalicIcon />
             </ToggleButton>
@@ -116,7 +124,10 @@ function TextEditor() {
               onChange={() => {
                 setIsUnderlined(!isUnderlined);
               }}
-              style={{ backgroundColor: isUnderlined ? colorPalette.grey : colorPalette.white }}
+              style={{
+                backgroundColor: isUnderlined ? colorPalette.grey : colorPalette.white,
+                border: '2px solid black',
+              }}
             >
               <FormatUnderlinedIcon />
             </ToggleButton>
@@ -126,7 +137,11 @@ function TextEditor() {
               onChange={() => {
                 setIsDark(!isDark);
               }}
-              style={{ backgroundColor: colorPalette.white, height: '50px' }}
+              style={{
+                backgroundColor: colorPalette.white,
+                height: '50px',
+                border: '2px solid black',
+              }}
             >
               <Box sx={{ overflow: 'hidden' }} ref={containerRef}>
                 <Slide

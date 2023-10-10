@@ -81,7 +81,8 @@ function TopBar() {
                     backgroundColor: colorPalette.white,
                     width: '150px',
                     color: 'black',
-                    borderRadius: '40px',
+                    border: '1px solid black',
+                    borderRadius: '10px',
                     ':hover': {
                       bgcolor: colorPalette.white,
                       color: 'black',
