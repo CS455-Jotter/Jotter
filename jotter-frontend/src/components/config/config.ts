@@ -6,7 +6,8 @@ const colorPalette = {
   black: '#000000',
   primary: '#FFC700',
   background: '#384152',
-  editor: '#000000'
+  editor: '#000000',
+  grey: '#A9A9A9',
 };
 
 export const baseURL = 'http://127.0.0.1:8000';

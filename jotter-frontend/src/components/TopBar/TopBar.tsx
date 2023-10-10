@@ -9,9 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { Button } from '@mui/material';
 import Link from 'next/link';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import colorPalette from '@/components/config/config';
-import { ThemeProvider } from '@mui/material/styles';
-import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
@@ -37,10 +36,10 @@ function TopBar() {
   };
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1}}>
-        <AppBar position="static" style={{ width: '100%', backgroundColor: colorPalette.white }}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" style={{ width: '100%', backgroundColor: colorPalette.white, padding: '10px' }}>
           <Toolbar>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight:900, color:"black" }}>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: 900, color: 'black' }}>
               JOTTER
             </Typography>
             {auth && (
