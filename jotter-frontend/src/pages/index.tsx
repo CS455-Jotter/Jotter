@@ -7,7 +7,8 @@ export default function MenuAppBar() {
   return (
     <div>
       <Head>
-        <title>JOtter</title>
+        <title>Jotter</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"/>
       </Head>
       <TextEditor />
     </div>
