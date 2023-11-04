@@ -1,7 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   Alert,
-  Button, Grid, Snackbar, Typography,
+  Button, CircularProgress, Grid, Snackbar, Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
@@ -17,9 +17,11 @@ function LoginBox() {
   const methods = useForm();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('username', data.email);
     formData.append('password', data.password);
@@ -28,11 +30,11 @@ function LoginBox() {
       .then((res) => {
         localStorage.setItem('access_token', res.data.access_token);
         router.push('/');
+        setIsLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setOpen(true);
-        // eslint-disable-next-line no-console
-        console.log(err);
+        setIsLoading(false);
       });
   };
 
@@ -130,6 +132,7 @@ function LoginBox() {
                       sx={{
                         backgroundColor: colorPalette.black,
                         width: '250px',
+                        height: '40px',
                         borderRadius: '40px',
                         ':hover': {
                           bgcolor: colorPalette.black,
@@ -138,7 +141,7 @@ function LoginBox() {
                       }}
                       type="submit"
                     >
-                      <ArrowForwardIcon />
+                      {isLoading ? <CircularProgress style={{ width: '25px', height: '25px', color: 'white' }} /> : <ArrowForwardIcon />}
                     </Button>
                     <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>
                       <Button
@@ -146,6 +149,7 @@ function LoginBox() {
                         sx={{
                           backgroundColor: colorPalette.black,
                           width: '250px',
+                          height: '40px',
                           borderRadius: '40px',
                           ':hover': {
                             bgcolor: colorPalette.black,

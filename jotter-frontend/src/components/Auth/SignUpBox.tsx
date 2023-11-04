@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import {
-  Button, Grid, Typography,
+  Alert,
+  Button, CircularProgress, Grid, Snackbar, Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -15,16 +16,21 @@ import Input from '../Input/Input';
 function SignUpBox() {
   const methods = useForm();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data : any) => {
+    setIsLoading(true);
     axios.post(`${baseURL}/users`, data)
-      .then((res) => {
-        // eslint-disable-next-line no-console
-        console.log(res);
+      .then(() => {
+        setIsLoading(false);
+        setOpen(true);
       })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err);
+      .catch(() => {
+        setIsLoading(false);
+        setError(true);
       });
     methods.reset();
   };
@@ -36,8 +42,36 @@ function SignUpBox() {
     }
   }, [router]);
 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+    setError(false);
+  };
+
   return (
     <div style={{ width: '380px', height: '480px' }}>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Account successfully created! Please login to continue.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Account already exists!
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: '100%',
@@ -125,7 +159,7 @@ function SignUpBox() {
                       }}
                       type="submit"
                     >
-                      <ArrowForwardIcon />
+                      {isLoading ? <CircularProgress style={{ width: '25px', height: '25px', color: 'white' }} /> : <ArrowForwardIcon />}
                     </Button>
                     <Link href="/login" style={{ textDecoration: 'none', color: '#ffffff' }}>
                       <Button
