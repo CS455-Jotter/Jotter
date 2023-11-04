@@ -1,6 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
-  Button, Grid, Typography,
+  Alert,
+  Button, Grid, Snackbar, Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
@@ -8,15 +9,17 @@ import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../Input/Input';
 import colorPalette, { baseURL } from '../config/config';
 
 function LoginBox() {
   const methods = useForm();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data : any) => {
+  const onSubmit = (data: any) => {
     const formData = new FormData();
     formData.append('username', data.email);
     formData.append('password', data.password);
@@ -27,10 +30,10 @@ function LoginBox() {
         router.push('/');
       })
       .catch((err) => {
+        setOpen(true);
         // eslint-disable-next-line no-console
         console.log(err);
       });
-    methods.reset();
   };
 
   useEffect(() => {
@@ -40,8 +43,25 @@ function LoginBox() {
     }
   }, [router]);
 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <div style={{ width: '380px', height: '480px' }}>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Wrong email or password!
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: '100%',

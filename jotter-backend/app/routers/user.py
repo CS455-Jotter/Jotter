@@ -38,7 +38,7 @@ def get_user(db: Session = Depends(get_db),email:int = Depends(oauth2.get_curren
 @router.put(
     "/save",
 )
-def save_state(state : schemas.State,db: Session = Depends(get_db),email:str = Depends(oauth2.get_current_user)):
+def save_state(state : schemas.State,db: Session = Depends(get_db),email:int = Depends(oauth2.get_current_user)):
     user_query = db.query(models.User).filter(models.User.email==email)
     user = user_query.first()
 
