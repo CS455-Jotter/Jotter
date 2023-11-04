@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import {
   Button, Grid, Typography,
@@ -7,12 +7,13 @@ import { Stack } from '@mui/system';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useForm, FormProvider } from 'react-hook-form';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import colorPalette, { baseURL } from '../config/config';
 import Input from '../Input/Input';
 
 function SignUpBox() {
   const methods = useForm();
-
+  const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data : any) => {
     axios.post(`${baseURL}/users`, data)
@@ -26,6 +27,13 @@ function SignUpBox() {
       });
     methods.reset();
   };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    if (accessToken) {
+      router.push('/');
+    }
+  }, [router]);
 
   return (
     <div style={{ width: '380px', height: '480px' }}>

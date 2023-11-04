@@ -20,7 +20,7 @@ const StyledTextField = styled(TextField)`
   },
 `;
 
-function TextEditor() {
+function TextEditor({ savedState, setSavedState }) {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderlined, setIsUnderlined] = useState(false);
@@ -203,7 +203,6 @@ function TextEditor() {
               }}
             >
               Save
-
             </Button>
           </Stack>
         </Stack>
@@ -212,9 +211,9 @@ function TextEditor() {
         <StyledTextField
           id="filled-multiline-static"
           multiline
-          rows={16}
           variant="outlined"
           style={{ width: '80vw' }}
+          rows={400 / Number(fontSize)}
           InputProps={{
             style: {
               border: '1.5px solid black',
@@ -228,6 +227,10 @@ function TextEditor() {
               backgroundColor: isDark ? colorPalette.editor : colorPalette.white,
               color: isDark ? colorPalette.white : colorPalette.black,
             },
+          }}
+          value={savedState}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setSavedState(event.target.value);
           }}
         />
       </Grid>

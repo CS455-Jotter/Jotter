@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import Head from 'next/head';
 import SignUpBox from '@/components/Auth/SignUpBox';
-import Layout from '@/components/Layout/Layout';
 
 function SignUp() {
   return (
@@ -26,13 +25,5 @@ function SignUp() {
     </>
   );
 }
-
-SignUp.getLayout = function getLayout(page) {
-  return (
-    <Layout>
-      {page}
-    </Layout>
-  );
-};
 
 export default SignUp;

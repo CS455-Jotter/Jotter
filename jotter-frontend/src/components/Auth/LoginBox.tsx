@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import Input from '../Input/Input';
 import colorPalette, { baseURL } from '../config/config';
 
@@ -31,6 +32,13 @@ function LoginBox() {
       });
     methods.reset();
   };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    if (accessToken) {
+      router.push('/');
+    }
+  }, [router]);
 
   return (
     <div style={{ width: '380px', height: '480px' }}>
