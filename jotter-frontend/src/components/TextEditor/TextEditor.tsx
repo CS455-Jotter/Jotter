@@ -89,6 +89,23 @@ function TextEditor({ savedState, setSavedState }) {
     }
   }, [savedState]);
 
+  const downloadContent = () => {
+    const element = document.createElement('a');
+    const file = new Blob([savedState], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'jotter_save.txt';
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
+  const handleInput = (event) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const text = (e.target?.result);
+      setSavedState(text);
+    };
+    reader.readAsText(event.target.files[0]);
+  };
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (isFocused) {
@@ -250,6 +267,7 @@ function TextEditor({ savedState, setSavedState }) {
             <Stack spacing={2} direction="row">
               <Button
                 variant="contained"
+                component="label"
                 style={{
                   backgroundColor: colorPalette.primary,
                   color: colorPalette.black,
@@ -260,6 +278,11 @@ function TextEditor({ savedState, setSavedState }) {
                 }}
               >
                 Upload
+                <input
+                  type="file"
+                  onChange={handleInput}
+                  hidden
+                />
               </Button>
               <Button
                 variant="contained"
@@ -271,6 +294,7 @@ function TextEditor({ savedState, setSavedState }) {
                   textTransform: 'none',
                   width: '212px',
                 }}
+                onClick={downloadContent}
               >
                 Download
               </Button>
