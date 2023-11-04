@@ -1,7 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   Alert,
-  Button, CircularProgress, Grid, Snackbar, Typography,
+  Button, CircularProgress, Fab, Grid, Slide, Snackbar, Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
@@ -10,6 +10,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 import Input from '../Input/Input';
 import colorPalette, { baseURL } from '../config/config';
 
@@ -18,6 +19,7 @@ function LoginBox() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
@@ -52,11 +54,43 @@ function LoginBox() {
 
     setOpen(false);
   };
+
+  useEffect(() => {
+    setChecked(true);
+  }, []);
+
   return (
     <div style={{
       width: '380px', height: '480px',
     }}
     >
+      <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
+        <Fab
+          variant="extended"
+          style={{
+            backgroundColor: colorPalette.primary,
+            height: '50px',
+            fontWeight: '800',
+            fontSize: '16px',
+            borderRadius: '0px 50px 50px 0px',
+            position: 'fixed',
+            left: 0,
+            top: 100,
+          }}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          <EditIcon
+            sx={{ mr: 1 }}
+            style={{
+              height: '30px',
+              width: '30px',
+            }}
+          />
+          Go to Editor!
+        </Fab>
+      </Slide>
       <Snackbar
         open={open}
         autoHideDuration={6000}

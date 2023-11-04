@@ -164,6 +164,11 @@ function TextEditor({ savedState, setSavedState }) {
                   height: '50px',
                   border: '1px solid black',
                 }}
+                MenuProps={{
+                  style: {
+                    maxHeight: 400,
+                  },
+                }}
               >
                 {' '}
                 {fonts.map((font) => (<MenuItem value={font} key={font}>{font}</MenuItem>))}

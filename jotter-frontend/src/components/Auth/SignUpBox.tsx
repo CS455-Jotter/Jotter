@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import {
   Alert,
-  Button, CircularProgress, Grid, Snackbar, Typography,
+  Button, CircularProgress, Fab, Grid, Slide, Snackbar, Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -10,6 +10,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import EditIcon from '@mui/icons-material/Edit';
 import colorPalette, { baseURL } from '../config/config';
 import Input from '../Input/Input';
 
@@ -19,7 +20,7 @@ function SignUpBox() {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
-
+  const [checked, setChecked] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data : any) => {
     setIsLoading(true);
@@ -50,8 +51,40 @@ function SignUpBox() {
     setError(false);
   };
 
+  useEffect(() => {
+    setChecked(true);
+  }, []);
+
   return (
     <div style={{ width: '380px', height: '480px' }}>
+      <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
+        <Fab
+          variant="extended"
+          style={{
+            backgroundColor: colorPalette.primary,
+            height: '50px',
+            fontWeight: '800',
+            fontSize: '16px',
+            borderRadius: '0px 50px 50px 0px',
+            position: 'fixed',
+            left: 0,
+            top: 100,
+          }}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          <EditIcon
+            sx={{ mr: 1 }}
+            style={{
+              height: '30px',
+              width: '30px',
+            }}
+          />
+          Go to Editor!
+        </Fab>
+
+      </Slide>
       <Snackbar
         open={open}
         autoHideDuration={6000}
