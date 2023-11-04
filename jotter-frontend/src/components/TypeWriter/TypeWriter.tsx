@@ -5,7 +5,7 @@ function TypeWriter() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.static_text}>
-        Hey, Welcome to JOtter.
+        Hey, Welcome to Jotter.
       </div>
       <div className={styles.dynamic_text}>
         <li><span>In a hurry? Just jot a note</span></li>

@@ -8,6 +8,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useForm, FormProvider } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import colorPalette, { baseURL } from '../config/config';
 import Input from '../Input/Input';
 
@@ -41,7 +42,8 @@ function SignUpBox() {
         sx={{
           width: '100%',
           height: '100%',
-          backgroundColor: colorPalette.dark,
+          backgroundColor: colorPalette.primary,
+          border: '3px solid  black',
           borderRadius: 10,
         }}
       >
@@ -60,7 +62,7 @@ function SignUpBox() {
               spacing={3}
               width="380px"
             >
-              <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>SignUp</Typography>
+              <Typography variant="h4" color={colorPalette.black} fontWeight={800}>SignUp</Typography>
               <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack
@@ -113,11 +115,11 @@ function SignUpBox() {
                       variant="contained"
                       size="large"
                       sx={{
-                        backgroundColor: colorPalette.darker,
-                        width: '50%',
+                        backgroundColor: colorPalette.black,
+                        width: '250px',
                         borderRadius: '40px',
                         ':hover': {
-                          bgcolor: colorPalette.darker,
+                          bgcolor: colorPalette.black,
                           color: 'white',
                         },
                       }}
@@ -125,6 +127,24 @@ function SignUpBox() {
                     >
                       <ArrowForwardIcon />
                     </Button>
+                    <Link href="/login" style={{ textDecoration: 'none', color: '#ffffff' }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: colorPalette.black,
+                          width: '250px',
+                          borderRadius: '40px',
+                          ':hover': {
+                            bgcolor: colorPalette.black,
+                            color: 'white',
+                          },
+                          textTransform: 'none',
+                          fontSize: 18,
+                        }}
+                      >
+                        Already a user? Login
+                      </Button>
+                    </Link>
                   </Stack>
                 </form>
               </FormProvider>

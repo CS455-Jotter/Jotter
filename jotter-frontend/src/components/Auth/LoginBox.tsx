@@ -51,7 +51,10 @@ function LoginBox() {
     setOpen(false);
   };
   return (
-    <div style={{ width: '380px', height: '480px' }}>
+    <div style={{
+      width: '380px', height: '480px',
+    }}
+    >
       <Snackbar
         open={open}
         autoHideDuration={6000}
@@ -66,7 +69,8 @@ function LoginBox() {
         sx={{
           width: '100%',
           height: '100%',
-          backgroundColor: colorPalette.dark,
+          backgroundColor: colorPalette.primary,
+          border: '3px solid  black',
           borderRadius: 10,
         }}
       >
@@ -85,7 +89,7 @@ function LoginBox() {
               spacing={3}
               width="380px"
             >
-              <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>Login</Typography>
+              <Typography variant="h4" color={colorPalette.black} fontWeight={800}>Login</Typography>
               <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack
@@ -124,11 +128,11 @@ function LoginBox() {
                       variant="contained"
                       size="large"
                       sx={{
-                        backgroundColor: colorPalette.darker,
-                        width: '50%',
+                        backgroundColor: colorPalette.black,
+                        width: '250px',
                         borderRadius: '40px',
                         ':hover': {
-                          bgcolor: colorPalette.darker,
+                          bgcolor: colorPalette.black,
                           color: 'white',
                         },
                       }}
@@ -140,14 +144,13 @@ function LoginBox() {
                       <Button
                         variant="contained"
                         sx={{
-                          backgroundColor: colorPalette.darker,
-                          width: '100%',
+                          backgroundColor: colorPalette.black,
+                          width: '250px',
                           borderRadius: '40px',
                           ':hover': {
-                            bgcolor: colorPalette.darker,
+                            bgcolor: colorPalette.black,
                             color: 'white',
                           },
-                          fontFamily: 'Caveat',
                           textTransform: 'none',
                           fontSize: 18,
                         }}

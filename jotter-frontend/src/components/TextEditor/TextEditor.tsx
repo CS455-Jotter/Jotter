@@ -30,12 +30,22 @@ const StyledTextField = styled(TextField)`
   },
 `;
 
+const fonts = [
+  'Arial',
+  'Roboto',
+  'Agbalumo',
+  'Noto Sans',
+  'Edu TAS Beginner',
+  'Roboto Slab',
+  'Playfair Display',
+  'Sometype Mono',
+];
 function TextEditor({ savedState, setSavedState }) {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderlined, setIsUnderlined] = useState(false);
-  const [fontSize, setFontSize] = useState('16');
-  const [fontType, setFontType] = useState('Calibri');
+  const [fontSize, setFontSize] = useState('20');
+  const [fontType, setFontType] = useState('Arial');
   const [isDark, setIsDark] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [open, setOpen] = useState(false);
@@ -89,12 +99,16 @@ function TextEditor({ savedState, setSavedState }) {
           saveToDb();
         } else if ((event.ctrlKey || event.metaKey) && charCode === '»') {
           event.preventDefault();
-          const newFontSize = Number(fontSize) + 2;
-          setFontSize(newFontSize.toString());
+          if (Number(fontSize) <= 30) {
+            const newFontSize = Number(fontSize) + 2;
+            setFontSize(newFontSize.toString());
+          }
         } else if ((event.ctrlKey || event.metaKey) && charCode === '½') {
           event.preventDefault();
-          const newFontSize = Number(fontSize) - 2;
-          setFontSize(newFontSize.toString());
+          if (Number(fontSize) >= 14) {
+            const newFontSize = Number(fontSize) - 2;
+            setFontSize(newFontSize.toString());
+          }
         }
       }
     };
@@ -134,9 +148,8 @@ function TextEditor({ savedState, setSavedState }) {
                   border: '1px solid black',
                 }}
               >
-                <MenuItem value="Calibri">Calibri</MenuItem>
-                <MenuItem value="Arial">Arial</MenuItem>
-                <MenuItem value="Roboto">Roboto</MenuItem>
+                {' '}
+                {fonts.map((font) => (<MenuItem value={font} key={font}>{font}</MenuItem>))}
               </Select>
               <Select
                 labelId="font-size"
@@ -150,14 +163,17 @@ function TextEditor({ savedState, setSavedState }) {
                   height: '50px',
                   border: '1px solid black',
                 }}
+                MenuProps={{
+                  style: {
+                    maxHeight: 400,
+                  },
+                }}
               >
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={12}>12</MenuItem>
-                <MenuItem value={14}>14</MenuItem>
-                <MenuItem value={16}>16</MenuItem>
-                <MenuItem value={18}>18</MenuItem>
-                <MenuItem value={20}>20</MenuItem>
-                <MenuItem value={30}>30</MenuItem>
+                {
+                  Array.from({ length: 20 }, (_, i) => i + 12).map((i) => (
+                    <MenuItem value={i} key={i}>{i}</MenuItem>
+                  ))
+                }
               </Select>
               <ToggleButton
                 value="check"
