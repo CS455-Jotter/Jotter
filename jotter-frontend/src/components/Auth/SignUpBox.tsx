@@ -1,29 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import {
-  Button, Grid, Typography,
+  Alert,
+  Button, CircularProgress, Fab, Grid, Slide, Snackbar, Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useForm, FormProvider } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import EditIcon from '@mui/icons-material/Edit';
 import colorPalette, { baseURL } from '../config/config';
 import Input from '../Input/Input';
 
 function SignUpBox() {
   const methods = useForm();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
+  const [checked, setChecked] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data : any) => {
+    setIsLoading(true);
     axios.post(`${baseURL}/users`, data)
-      .then((res) => {
-        // eslint-disable-next-line no-console
-        console.log(res);
+      .then(() => {
+        setIsLoading(false);
+        setOpen(true);
       })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err);
+      .catch(() => {
+        setIsLoading(false);
+        setError(true);
       });
     methods.reset();
   };
@@ -35,13 +43,74 @@ function SignUpBox() {
     }
   }, [router]);
 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+    setError(false);
+  };
+
+  useEffect(() => {
+    setChecked(true);
+  }, []);
+
   return (
     <div style={{ width: '380px', height: '480px' }}>
+      <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
+        <Fab
+          variant="extended"
+          style={{
+            backgroundColor: colorPalette.primary,
+            height: '50px',
+            fontWeight: '800',
+            fontSize: '16px',
+            borderRadius: '0px 50px 50px 0px',
+            position: 'fixed',
+            left: 0,
+            top: 100,
+          }}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          <EditIcon
+            sx={{ mr: 1 }}
+            style={{
+              height: '30px',
+              width: '30px',
+            }}
+          />
+          Go to Editor!
+        </Fab>
+
+      </Slide>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Account successfully created! Please login to continue.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Account already exists!
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: '100%',
           height: '100%',
-          backgroundColor: colorPalette.dark,
+          backgroundColor: colorPalette.primary,
+          border: '3px solid  black',
           borderRadius: 10,
         }}
       >
@@ -60,7 +129,7 @@ function SignUpBox() {
               spacing={3}
               width="380px"
             >
-              <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>SignUp</Typography>
+              <Typography variant="h4" color={colorPalette.black} fontWeight={800}>SignUp</Typography>
               <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack
@@ -113,18 +182,36 @@ function SignUpBox() {
                       variant="contained"
                       size="large"
                       sx={{
-                        backgroundColor: colorPalette.darker,
-                        width: '50%',
+                        backgroundColor: colorPalette.black,
+                        width: '250px',
                         borderRadius: '40px',
                         ':hover': {
-                          bgcolor: colorPalette.darker,
+                          bgcolor: colorPalette.black,
                           color: 'white',
                         },
                       }}
                       type="submit"
                     >
-                      <ArrowForwardIcon />
+                      {isLoading ? <CircularProgress style={{ width: '25px', height: '25px', color: 'white' }} /> : <ArrowForwardIcon />}
                     </Button>
+                    <Link href="/login" style={{ textDecoration: 'none', color: '#ffffff' }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: colorPalette.black,
+                          width: '250px',
+                          borderRadius: '40px',
+                          ':hover': {
+                            bgcolor: colorPalette.black,
+                            color: 'white',
+                          },
+                          textTransform: 'none',
+                          fontSize: 18,
+                        }}
+                      >
+                        Already a user? Login
+                      </Button>
+                    </Link>
                   </Stack>
                 </form>
               </FormProvider>

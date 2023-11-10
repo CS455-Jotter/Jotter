@@ -29,8 +29,8 @@ function Input({
       InputProps={{
         style: {
           borderRadius: '40px',
+          border: '2px solid black',
           backgroundColor: 'white',
-          fontFamily: 'Caveat',
         },
         placeholder,
         endAdornment: (errors[name]

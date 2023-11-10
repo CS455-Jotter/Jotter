@@ -1,6 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
-  Button, Grid, Typography,
+  Alert,
+  Button, CircularProgress, Fab, Grid, Slide, Snackbar, Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
@@ -8,15 +9,21 @@ import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 import Input from '../Input/Input';
 import colorPalette, { baseURL } from '../config/config';
 
 function LoginBox() {
   const methods = useForm();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data : any) => {
+  const onSubmit = (data: any) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('username', data.email);
     formData.append('password', data.password);
@@ -25,12 +32,12 @@ function LoginBox() {
       .then((res) => {
         localStorage.setItem('access_token', res.data.access_token);
         router.push('/');
+        setIsLoading(false);
       })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err);
+      .catch(() => {
+        setOpen(true);
+        setIsLoading(false);
       });
-    methods.reset();
   };
 
   useEffect(() => {
@@ -40,13 +47,66 @@ function LoginBox() {
     }
   }, [router]);
 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    setChecked(true);
+  }, []);
+
   return (
-    <div style={{ width: '380px', height: '480px' }}>
+    <div style={{
+      width: '380px', height: '480px',
+    }}
+    >
+      <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
+        <Fab
+          variant="extended"
+          style={{
+            backgroundColor: colorPalette.primary,
+            height: '50px',
+            fontWeight: '800',
+            fontSize: '16px',
+            borderRadius: '0px 50px 50px 0px',
+            position: 'fixed',
+            left: 0,
+            top: 100,
+          }}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          <EditIcon
+            sx={{ mr: 1 }}
+            style={{
+              height: '30px',
+              width: '30px',
+            }}
+          />
+          Go to Editor!
+        </Fab>
+      </Slide>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Wrong email or password!
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: '100%',
           height: '100%',
-          backgroundColor: colorPalette.dark,
+          backgroundColor: colorPalette.primary,
+          border: '3px solid  black',
           borderRadius: 10,
         }}
       >
@@ -65,7 +125,7 @@ function LoginBox() {
               spacing={3}
               width="380px"
             >
-              <Typography variant="h4" color="white" fontFamily="Caveat" fontWeight={800}>Login</Typography>
+              <Typography variant="h4" color={colorPalette.black} fontWeight={800}>Login</Typography>
               <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                   <Stack
@@ -104,30 +164,31 @@ function LoginBox() {
                       variant="contained"
                       size="large"
                       sx={{
-                        backgroundColor: colorPalette.darker,
-                        width: '50%',
+                        backgroundColor: colorPalette.black,
+                        width: '250px',
+                        height: '40px',
                         borderRadius: '40px',
                         ':hover': {
-                          bgcolor: colorPalette.darker,
+                          bgcolor: colorPalette.black,
                           color: 'white',
                         },
                       }}
                       type="submit"
                     >
-                      <ArrowForwardIcon />
+                      {isLoading ? <CircularProgress style={{ width: '25px', height: '25px', color: 'white' }} /> : <ArrowForwardIcon />}
                     </Button>
                     <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>
                       <Button
                         variant="contained"
                         sx={{
-                          backgroundColor: colorPalette.darker,
-                          width: '100%',
+                          backgroundColor: colorPalette.black,
+                          width: '250px',
+                          height: '40px',
                           borderRadius: '40px',
                           ':hover': {
-                            bgcolor: colorPalette.darker,
+                            bgcolor: colorPalette.black,
                             color: 'white',
                           },
-                          fontFamily: 'Caveat',
                           textTransform: 'none',
                           fontSize: 18,
                         }}
