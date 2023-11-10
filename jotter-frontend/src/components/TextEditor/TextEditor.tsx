@@ -1,35 +1,66 @@
-import {
-  DialogActions,
-  Grid, Slide, TextField, ToggleButton,
-} from '@mui/material';
-import React, {
-  useEffect, useState, useRef, useCallback,
-} from 'react';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Box, Stack } from '@mui/system';
-import styled from 'styled-components';
-import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-
+import {
+  DialogActions,
+  Grid, Slide, ToggleButton,
+} from '@mui/material';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useRouter } from 'next/router';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { Box, Stack } from '@mui/system';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import colorPalette, { baseURL } from '@/components/config/config';
 
-const StyledTextField = styled(TextField)`
- & .MuiInputBase-input  {
-  height : '100vh',
-  },
-`;
-
+function FindInput({ searchTerm, setSearchTerm, handleFind }) {
+  return (
+    <Paper
+      component="form"
+      sx={{
+        p: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
+        width: 400,
+        backgroundColor: colorPalette.primary,
+        height: '60px',
+        position: 'fixed',
+        bottom: -2,
+        right: 100,
+        border: '3px solid black',
+        borderRadius: '10px 10px 0px 0px',
+      }}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1, color: colorPalette.black }}
+        placeholder="Find something in the text ..."
+        value={searchTerm}
+        onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+          setSearchTerm(event.target.value);
+        }}
+      />
+      <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleFind}>
+        <SearchIcon sx={{ color: colorPalette.black }} />
+      </IconButton>
+    </Paper>
+  );
+}
 const fonts = [
   'Arial',
   'Roboto',
@@ -40,15 +71,14 @@ const fonts = [
   'Playfair Display',
   'Sometype Mono',
 ];
+
 function TextEditor({ savedState, setSavedState }) {
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderlined, setIsUnderlined] = useState(false);
   const [fontSize, setFontSize] = useState('20');
   const [fontType, setFontType] = useState('Arial');
   const [isDark, setIsDark] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const router = useRouter();
 
@@ -56,6 +86,12 @@ function TextEditor({ savedState, setSavedState }) {
     setOpen(false);
   };
 
+  const handleFind = () => {
+    const elem = document.getElementById('text-editor');
+    if (elem) {
+      elem.innerHTML = elem.innerHTML.replace(searchTerm, `<span class="highlight">${searchTerm}</span>`);
+    }
+  };
   const containerRef = useRef<HTMLElement>(null);
 
   const handleFontSizeChange = (event: SelectChangeEvent) => {
@@ -89,13 +125,23 @@ function TextEditor({ savedState, setSavedState }) {
     }
   }, [savedState]);
 
+  const performAction = (command:string) => {
+    const editor = document.getElementById('text-editor');
+    document.execCommand(command, false, undefined);
+    editor?.focus();
+  };
+
   const downloadContent = () => {
     const element = document.createElement('a');
-    const file = new Blob([savedState], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = 'jotter_save.txt';
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
+    const editor = document.getElementById('text-editor');
+    const text = editor?.textContent;
+    if (text) {
+      const file = new Blob([text], { type: 'text/plain' });
+      element.href = URL.createObjectURL(file);
+      element.download = 'jotter_save.txt';
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+    }
   };
 
   const handleInput = (event) => {
@@ -103,9 +149,14 @@ function TextEditor({ savedState, setSavedState }) {
     reader.onload = async (e) => {
       const text = (e.target?.result);
       setSavedState(text);
+      const elem = document.getElementById('text-editor');
+      if (elem && text) {
+        elem.innerHTML = text.toString();
+      }
     };
     reader.readAsText(event.target.files[0]);
   };
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (isFocused) {
@@ -137,6 +188,7 @@ function TextEditor({ savedState, setSavedState }) {
 
   return (
     <>
+      <FindInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleFind={handleFind} />
       <Grid
         container
         direction="column"
@@ -149,201 +201,215 @@ function TextEditor({ savedState, setSavedState }) {
           paddingTop: '15px',
         }}
       >
-        <Grid item xs={12} style={{ margin: '10px' }}>
-          <Stack direction="row" spacing={2} style={{ height: '50px' }}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Select
-                labelId="font-type"
-                id="font-type"
-                value={fontType}
-                label="Type"
-                onChange={handleFontTypeChange}
-                style={{
-                  backgroundColor: colorPalette.white,
-                  width: '290px',
-                  height: '50px',
-                  border: '1px solid black',
-                }}
-                MenuProps={{
-                  style: {
-                    maxHeight: 400,
-                  },
-                }}
-              >
-                {' '}
-                {fonts.map((font) => (<MenuItem value={font} key={font}>{font}</MenuItem>))}
-              </Select>
-              <Select
-                labelId="font-size"
-                id="font-size"
-                value={fontSize}
-                label="Size"
-                onChange={handleFontSizeChange}
-                autoWidth
-                style={{
-                  backgroundColor: colorPalette.white,
-                  height: '50px',
-                  border: '1px solid black',
-                }}
-                MenuProps={{
-                  style: {
-                    maxHeight: 400,
-                  },
-                }}
-              >
-                {
-                  Array.from({ length: 20 }, (_, i) => i + 12).map((i) => (
+        <Stack
+          direction="row"
+          spacing={2}
+          style={{
+            position: 'fixed',
+            height: '100px',
+            backgroundColor: colorPalette.light,
+            width: '70vw',
+            borderRadius: '10px',
+            padding: '0px 50px',
+          }}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Select
+            labelId="font-type"
+            id="font-type"
+            value={fontType}
+            label="Type"
+            onChange={handleFontTypeChange}
+            style={{
+              backgroundColor: colorPalette.white,
+              width: '290px',
+              height: '50px',
+              border: '2px solid black',
+            }}
+            MenuProps={{
+              style: {
+                maxHeight: 400,
+              },
+            }}
+          >
+            {' '}
+            {fonts.map((font) => (<MenuItem value={font} key={font}>{font}</MenuItem>))}
+          </Select>
+          <Select
+            labelId="font-size"
+            id="font-size"
+            value={fontSize}
+            label="Size"
+            onChange={handleFontSizeChange}
+            autoWidth
+            style={{
+              backgroundColor: colorPalette.white,
+              height: '50px',
+              border: '2px solid black',
+            }}
+            MenuProps={{
+              style: {
+                maxHeight: 400,
+              },
+            }}
+          >
+            {
+                  Array.from({ length: 21 }, (_, i) => i + 12).map((i) => (
                     <MenuItem value={i} key={i}>{i}</MenuItem>
                   ))
                 }
-              </Select>
-              <ToggleButton
-                value="check"
-                selected={isBold}
-                onChange={() => {
-                  setIsBold(!isBold);
-                }}
-                style={{
-                  backgroundColor: isBold ? colorPalette.grey : colorPalette.white,
-                  border: '2px solid black',
-                }}
-              >
-                <FormatBoldIcon />
-              </ToggleButton>
-              <ToggleButton
-                value="check"
-                selected={isItalic}
-                onChange={() => {
-                  setIsItalic(!isItalic);
-                }}
-                style={{
-                  backgroundColor: isItalic ? colorPalette.grey : colorPalette.white,
-                  border: '2px solid black',
-                }}
-              >
-                <FormatItalicIcon />
-              </ToggleButton>
-              <ToggleButton
-                value="check"
-                selected={isUnderlined}
-                onChange={() => {
-                  setIsUnderlined(!isUnderlined);
-                }}
-                style={{
-                  backgroundColor: isUnderlined ? colorPalette.grey : colorPalette.white,
-                  border: '2px solid black',
-                }}
-              >
-                <FormatUnderlinedIcon />
-              </ToggleButton>
-              <ToggleButton
-                value="check"
-                selected={isDark}
-                onChange={() => {
-                  setIsDark(!isDark);
-                }}
-                style={{
-                  backgroundColor: colorPalette.white,
-                  height: '50px',
-                  border: '2px solid black',
-                }}
-              >
-                <Box sx={{ overflow: 'hidden' }} ref={containerRef}>
-                  <Slide
-                    in={isDark}
-                    direction="up"
-                    container={containerRef.current}
-                    style={{ display: isDark ? 'block' : 'none' }}
-                  >
-                    <WbSunnyIcon />
-                  </Slide>
-                  <Slide
-                    in={!isDark}
-                    direction="down"
-                    container={containerRef.current}
-                    style={{ display: !isDark ? 'block' : 'none' }}
-                  >
-                    <DarkModeIcon />
-                  </Slide>
-                </Box>
-                {/* {isDark ? <WbSunnyIcon /> : <DarkModeIcon />} */}
-              </ToggleButton>
-            </Stack>
-            <Stack spacing={2} direction="row">
-              <Button
-                variant="contained"
-                component="label"
-                style={{
-                  backgroundColor: colorPalette.primary,
-                  color: colorPalette.black,
-                  border: '1px solid black',
-                  fontWeight: 'bold',
-                  textTransform: 'none',
-                  width: '212px',
-                }}
-              >
-                Upload
-                <input
-                  type="file"
-                  onChange={handleInput}
-                  hidden
-                />
-              </Button>
-              <Button
-                variant="contained"
-                style={{
-                  backgroundColor: colorPalette.primary,
-                  color: colorPalette.black,
-                  border: '1px solid black',
-                  fontWeight: 'bold',
-                  textTransform: 'none',
-                  width: '212px',
-                }}
-                onClick={downloadContent}
-              >
-                Download
-              </Button>
-              <Button
-                variant="contained"
-                style={{
-                  backgroundColor: colorPalette.primary,
-                  color: colorPalette.black,
-                  border: '1px solid black',
-                  fontWeight: 'bold',
-                  textTransform: 'none',
-                  width: '212px',
-                }}
-                onClick={saveToDb}
-              >
-                Save
-              </Button>
-            </Stack>
-          </Stack>
-        </Grid>
-        <Grid item xs={12}>
-          <StyledTextField
-            id="text-editor"
-            multiline
-            variant="outlined"
-            style={{ width: '80vw' }}
-            rows={400 / Number(fontSize)}
-            InputProps={{
-              style: {
-                border: '1.5px solid black',
-                borderRadius: '4px',
-                fontWeight: isBold ? '1000' : '400',
-                fontStyle: isItalic ? 'italic' : 'normal',
-                textDecoration: isUnderlined ? 'underline' : 'none',
-                fontSize: `${fontSize}px`,
-                fontFamily: fontType,
-                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-                backgroundColor: isDark ? colorPalette.editor : colorPalette.white,
-                color: isDark ? colorPalette.white : colorPalette.black,
-              },
+          </Select>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.white,
+              color: colorPalette.black,
+              border: '2px solid black',
+              height: '50px',
+              width: '50px',
+              textTransform: 'none',
             }}
-            value={savedState}
+            onClick={() => {
+              performAction('bold');
+            }}
+          >
+            <FormatBoldIcon />
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.white,
+              color: colorPalette.black,
+              border: '2px solid black',
+              height: '50px',
+              width: '50px',
+              textTransform: 'none',
+            }}
+            onClick={() => {
+              performAction('italic');
+            }}
+          >
+            <FormatItalicIcon />
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.white,
+              color: colorPalette.black,
+              border: '2px solid black',
+              height: '50px',
+              width: '50px',
+              textTransform: 'none',
+            }}
+            onClick={() => {
+              performAction('underline');
+            }}
+          >
+            <FormatUnderlinedIcon />
+          </Button>
+          <ToggleButton
+            value="check"
+            selected={isDark}
+            onChange={() => {
+              setIsDark(!isDark);
+            }}
+            style={{
+              backgroundColor: colorPalette.white,
+              height: '50px',
+              width: '60px',
+              border: '2px solid black',
+            }}
+          >
+            <Box sx={{ overflow: 'hidden' }} ref={containerRef}>
+              <Slide
+                in={isDark}
+                direction="up"
+                container={containerRef.current}
+                style={{ display: isDark ? 'block' : 'none' }}
+              >
+                <WbSunnyIcon />
+              </Slide>
+              <Slide
+                in={!isDark}
+                direction="down"
+                container={containerRef.current}
+                style={{ display: !isDark ? 'block' : 'none' }}
+              >
+                <DarkModeIcon />
+              </Slide>
+            </Box>
+          </ToggleButton>
+          <Button
+            variant="contained"
+            component="label"
+            style={{
+              backgroundColor: colorPalette.primary,
+              color: colorPalette.black,
+              border: '1px solid black',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              width: '212px',
+              height: '50px',
+            }}
+          >
+            Upload
+            <input
+              type="file"
+              onChange={handleInput}
+              hidden
+            />
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.primary,
+              color: colorPalette.black,
+              border: '1px solid black',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              width: '212px',
+              height: '50px',
+            }}
+            onClick={downloadContent}
+          >
+            Download
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.primary,
+              color: colorPalette.black,
+              border: '1px solid black',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              width: '212px',
+              height: '50px',
+            }}
+            onClick={saveToDb}
+          >
+            Save
+          </Button>
+        </Stack>
+        <Grid item xs={12}>
+          <div
+            id="text-editor"
+            contentEditable
+            style={{
+              width: '75vw',
+              margin: '100px 0px',
+              padding: '5px',
+              minHeight: '50vh',
+              border: '3px solid black',
+              borderRadius: '4px',
+              fontSize: `${fontSize}px`,
+              fontFamily: fontType,
+              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+              backgroundColor: isDark ? colorPalette.editor : colorPalette.white,
+              color: isDark ? colorPalette.white : colorPalette.black,
+            }}
             onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSavedState(event.target.value);
+              setSavedState(event.currentTarget.innerHTML);
             }}
             onFocus={() => {
               setIsFocused(true);
