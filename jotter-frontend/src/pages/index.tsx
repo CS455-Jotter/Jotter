@@ -28,6 +28,10 @@ export default function MenuAppBar() {
         if (res.data.email) {
           setAuth(true);
           setSavedState(res.data.saved_state);
+          const elem = document.getElementById('text-editor');
+          if (elem) {
+            elem.innerHTML = res.data.saved_state;
+          }
         }
       })
         .catch(() => {

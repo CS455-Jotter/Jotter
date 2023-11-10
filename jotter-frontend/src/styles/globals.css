@@ -4,3 +4,8 @@ body {
     margin: 0px !important;
     font-family: 'Montserrat, sans-serif';
 }
+
+.highlight{ 
+    color: black; 
+    background-color: yellow;
+}
