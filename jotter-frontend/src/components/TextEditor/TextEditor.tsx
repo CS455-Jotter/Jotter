@@ -5,8 +5,7 @@ import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
 import SearchIcon from '@mui/icons-material/Search';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import {
-  DialogActions,
-  Grid, Slide, ToggleButton,
+  DialogActions, Slide, ToggleButton,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -27,6 +26,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import colorPalette, { baseURL } from '@/components/config/config';
 
 function FindInput({ searchTerm, setSearchTerm, handleFind }) {
@@ -189,23 +190,22 @@ function TextEditor({ savedState, setSavedState }) {
   return (
     <>
       <FindInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleFind={handleFind} />
-      <Grid
-        container
+      <Stack
         direction="column"
         alignItems="center"
         spacing={1}
         sx={{
-          minHeight: '90vh',
-          width: '100vw',
+          height: '91vh',
           backgroundColor: isDark ? colorPalette.background : colorPalette.white,
-          paddingTop: '15px',
         }}
       >
         <Stack
+          id="toolbar"
           direction="row"
           spacing={2}
           style={{
             position: 'fixed',
+            top: 95,
             height: '100px',
             backgroundColor: colorPalette.light,
             width: '70vw',
@@ -308,6 +308,38 @@ function TextEditor({ savedState, setSavedState }) {
           >
             <FormatUnderlinedIcon />
           </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.white,
+              color: colorPalette.black,
+              border: '2px solid black',
+              height: '50px',
+              width: '50px',
+              textTransform: 'none',
+            }}
+            onClick={() => {
+              performAction('insertorderedlist');
+            }}
+          >
+            <FormatListNumberedIcon />
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.white,
+              color: colorPalette.black,
+              border: '2px solid black',
+              height: '50px',
+              width: '50px',
+              textTransform: 'none',
+            }}
+            onClick={() => {
+              performAction('insertunorderedlist');
+            }}
+          >
+            <FormatListBulletedIcon />
+          </Button>
           <ToggleButton
             value="check"
             selected={isDark}
@@ -391,35 +423,33 @@ function TextEditor({ savedState, setSavedState }) {
             Save
           </Button>
         </Stack>
-        <Grid item xs={12}>
-          <div
-            id="text-editor"
-            contentEditable
-            style={{
-              width: '75vw',
-              margin: '100px 0px',
-              padding: '5px',
-              minHeight: '50vh',
-              border: '3px solid black',
-              borderRadius: '4px',
-              fontSize: `${fontSize}px`,
-              fontFamily: fontType,
-              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-              backgroundColor: isDark ? colorPalette.editor : colorPalette.white,
-              color: isDark ? colorPalette.white : colorPalette.black,
-            }}
-            onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSavedState(event.currentTarget.innerHTML);
-            }}
-            onFocus={() => {
-              setIsFocused(true);
-            }}
-            onBlur={() => {
-              setIsFocused(false);
-            }}
-          />
-        </Grid>
-      </Grid>
+        <div
+          id="text-editor"
+          contentEditable
+          style={{
+            width: '75vw',
+            margin: '120px 0px',
+            padding: '5px',
+            minHeight: '50vh',
+            border: '3px solid black',
+            borderRadius: '4px',
+            fontSize: `${fontSize}px`,
+            fontFamily: fontType,
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+            backgroundColor: isDark ? colorPalette.editor : colorPalette.white,
+            color: isDark ? colorPalette.white : colorPalette.black,
+          }}
+          onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setSavedState(event.currentTarget.innerHTML);
+          }}
+          onFocus={() => {
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+          }}
+        />
+      </Stack>
       <Dialog
         open={open}
         onClose={handleClose}
