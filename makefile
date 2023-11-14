@@ -10,9 +10,3 @@ migrate:
 revision:
 	cd jotter-backend ;\
 	alembic revision --autogenerate;
-
-test:
-	cd jotter-backend ;\
-	source venv/bin/activate ; \
-	cd app ;\
-	pytest --disable-warnings ;
