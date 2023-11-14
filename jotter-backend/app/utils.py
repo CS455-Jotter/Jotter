@@ -5,7 +5,4 @@ def hash(s):
     return pwd_context.hash(s)
 
 def verify(user,testUser):
-    try:
-        return pwd_context.verify(testUser.password,user.password)
-    except : 
-        return False
+    return pwd_context.verify(testUser.password,user.password)

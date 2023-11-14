@@ -9,6 +9,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useForm, FormProvider } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import colorPalette, { baseURL } from '../config/config';
 import Input from '../Input/Input';
@@ -193,25 +194,24 @@ function SignUpBox() {
                     >
                       {isLoading ? <CircularProgress style={{ width: '25px', height: '25px', color: 'white' }} /> : <ArrowForwardIcon />}
                     </Button>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: colorPalette.black,
-                        width: '250px',
-                        borderRadius: '40px',
-                        ':hover': {
-                          bgcolor: colorPalette.black,
-                          color: 'white',
-                        },
-                        textTransform: 'none',
-                        fontSize: 18,
-                      }}
-                      onClick={() => {
-                        router.push('/login');
-                      }}
-                    >
-                      Already a user? Login
-                    </Button>
+                    <Link href="/login" style={{ textDecoration: 'none', color: '#ffffff' }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: colorPalette.black,
+                          width: '250px',
+                          borderRadius: '40px',
+                          ':hover': {
+                            bgcolor: colorPalette.black,
+                            color: 'white',
+                          },
+                          textTransform: 'none',
+                          fontSize: 18,
+                        }}
+                      >
+                        Already a user? Login
+                      </Button>
+                    </Link>
                   </Stack>
                 </form>
               </FormProvider>

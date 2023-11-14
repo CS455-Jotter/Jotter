@@ -6,7 +6,7 @@ import TextEditor from '@/components/TextEditor/TextEditor';
 import { baseURL } from '@/components/config/config';
 import TopBar from '@/components/TopBar/TopBar';
 
-export default function Home() {
+export default function MenuAppBar() {
   const router = useRouter();
   const [savedState, setSavedState] = useState('');
   const [auth, setAuth] = useState(false);
