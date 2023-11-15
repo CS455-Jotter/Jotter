@@ -12,7 +12,6 @@
       "plugin:jsx-a11y/recommended",
       "plugin:testing-library/react",
       "plugin:jest-dom/recommended",
-      "next/core-web-vitals",
       "eslint:recommended"
     ],
     "parser": "@typescript-eslint/parser",
