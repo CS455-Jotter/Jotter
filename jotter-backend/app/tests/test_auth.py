@@ -13,18 +13,19 @@ class TestUserAuth:
     wrong_password = "wrongpassword"
     wrong_username = "mskfeioncea"
     token =""
-    db = next(get_db())
 
     def test_register_user(self):
+        db = next(get_db())
 
         # check if a user can register
         response = requests.post(self.reg_url,json={"email":self.username,"password":self.password})
 
         # delete the test user from db
-        self.db.query(models.User).filter(models.User.email==self.username).delete()
-        self.db.commit()
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
 
         # test
+        db.close_all()
         assert response.status_code == 200
 
     def test_invalid_user_login(self):
@@ -38,28 +39,30 @@ class TestUserAuth:
         assert respone2.status_code == 403
 
     def test_valid_user_login(self):
-
+        db = next(get_db())
         # add a valid user into db
         hashpwd = utils.hash(self.password)
-        self.db.add(models.User(email=self.username,password=hashpwd))
-        self.db.commit()
+        db.add(models.User(email=self.username,password=hashpwd))
+        db.commit()
 
         # check if the user can login
         response = requests.post(self.url,data={"username":self.username,"password":self.password})
 
         # delete the test user from db
-        self.db.query(models.User).filter(models.User.email==self.username).delete()
-        self.db.commit()
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
 
+        db.close_all()
         # test
         assert response.status_code == 200
 
 
     def test_user_from_token(self):
+        db = next(get_db())
         # add a valid user into db
         hashpwd = utils.hash(self.password)
-        self.db.add(models.User(email=self.username,password=hashpwd))
-        self.db.commit()
+        db.add(models.User(email=self.username,password=hashpwd))
+        db.commit()
 
         # get the token
         response = requests.post(self.url ,data={"username":self.username,"password":self.password})
@@ -69,8 +72,10 @@ class TestUserAuth:
         response = requests.get(self.reg_url,headers={"Authorization":f"Bearer {self.token}"})
 
         # delete the test user from db
-        self.db.query(models.User).filter(models.User.email==self.username).delete()
-        self.db.commit()
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
+
+        db.close_all()
 
         # test
         assert response.status_code == 200
