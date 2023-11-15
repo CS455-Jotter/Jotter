@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     secret_key :str
     algorithm : str
     access_token_expiration_time_minutes : int
+    base_url : str
     class Config():
         env_file=".env"
 
