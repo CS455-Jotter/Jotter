@@ -8,7 +8,7 @@ import { Stack } from '@mui/system';
 import { FormProvider, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import Input from '../Input/Input';
 import colorPalette, { baseURL } from '../config/config';
