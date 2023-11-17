@@ -1,0 +1,46 @@
+name : Linting Check
+
+on : [push, pull_request]
+
+jobs:
+    test:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./jotter-frontend
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test using Node.js
+          uses: actions/setup-node@v1
+          with:
+            node-version: '16'
+        - run: yarn install
+        - run: yarn lint
+  
+        - name: No linting Errors ✅
+          if: ${{ success() }}
+          run: |
+            curl --request POST \
+            --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'content-type: application/json' \
+            --data '{
+              "context": "lint",
+              "state": "success",
+              "description": "Tests passed",
+              "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'
+  
+        - name: Linting Errors 🚨
+          if: ${{ failure() }}
+          run: |
+            curl --request POST \
+            --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'content-type: application/json' \
+            --data '{
+              "context": "lint",
+              "state": "failure",
+              "description": "Tests failed",
+              "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'
