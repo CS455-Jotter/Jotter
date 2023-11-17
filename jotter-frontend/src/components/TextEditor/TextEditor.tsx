@@ -2,7 +2,6 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import SearchIcon from '@mui/icons-material/Search';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import {
   DialogActions, Slide, ToggleButton,
@@ -12,10 +11,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
 import MenuItem from '@mui/material/MenuItem';
-import Paper from '@mui/material/Paper';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, Stack } from '@mui/system';
 import axios from 'axios';
@@ -29,39 +25,8 @@ import React, {
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import colorPalette, { baseURL } from '@/components/config/config';
+import FindReplaceModal from '../FindReplace/FindReplaceModal';
 
-function FindInput({ searchTerm, setSearchTerm, handleFind }) {
-  return (
-    <Paper
-      component="form"
-      sx={{
-        p: '2px 4px',
-        display: 'flex',
-        alignItems: 'center',
-        width: 400,
-        backgroundColor: colorPalette.primary,
-        height: '60px',
-        position: 'fixed',
-        bottom: -2,
-        right: 100,
-        border: '3px solid black',
-        borderRadius: '10px 10px 0px 0px',
-      }}
-    >
-      <InputBase
-        sx={{ ml: 1, flex: 1, color: colorPalette.black }}
-        placeholder="Find something in the text ..."
-        value={searchTerm}
-        onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setSearchTerm(event.target.value);
-        }}
-      />
-      <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleFind}>
-        <SearchIcon sx={{ color: colorPalette.black }} />
-      </IconButton>
-    </Paper>
-  );
-}
 const fonts = [
   'Arial',
   'Roboto',
@@ -79,7 +44,10 @@ function TextEditor({ savedState, setSavedState }) {
   const [isDark, setIsDark] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
 
   const router = useRouter();
 
@@ -87,12 +55,6 @@ function TextEditor({ savedState, setSavedState }) {
     setOpen(false);
   };
 
-  const handleFind = () => {
-    const elem = document.getElementById('text-editor');
-    if (elem) {
-      elem.innerHTML = elem.innerHTML.replace(searchTerm, `<span class="highlight">${searchTerm}</span>`);
-    }
-  };
   const containerRef = useRef<HTMLElement>(null);
 
   const handleFontSizeChange = (event: SelectChangeEvent) => {
@@ -178,6 +140,9 @@ function TextEditor({ savedState, setSavedState }) {
             const newFontSize = Number(fontSize) - 2;
             setFontSize(newFontSize.toString());
           }
+        } else if ((event.ctrlKey || event.metaKey) && charCode === 'f') {
+          event.preventDefault();
+          handleModalOpen();
         }
       }
     };
@@ -189,7 +154,7 @@ function TextEditor({ savedState, setSavedState }) {
 
   return (
     <>
-      <FindInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleFind={handleFind} />
+      <FindReplaceModal handleModalClose={handleModalClose} modalOpen={modalOpen} />
       <Stack
         direction="column"
         alignItems="center"
@@ -422,15 +387,29 @@ function TextEditor({ savedState, setSavedState }) {
           >
             Save
           </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: colorPalette.primary,
+              color: colorPalette.black,
+              border: '1px solid black',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              width: '212px',
+              height: '50px',
+            }}
+            onClick={handleModalOpen}
+          >
+            Find and Replace
+          </Button>
         </Stack>
         <div
           id="text-editor"
           contentEditable
           style={{
             width: '75vw',
-            margin: '120px 0px',
+            margin: '130px 0px',
             padding: '5px',
-            minHeight: '50vh',
             border: '3px solid black',
             borderRadius: '4px',
             fontSize: `${fontSize}px`,
