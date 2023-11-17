@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch",
+    "test:watch": "jest --watchAll",
+    "test:ci" : "jest --ci --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
