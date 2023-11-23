@@ -21,42 +21,21 @@ const style = {
 function FindReplaceModal({ modalOpen, handleModalClose }) {
   const [findTerm, setFindTerm] = React.useState('');
   const [replaceTerm, setReplaceTerm] = React.useState('');
-
-  const getTextSegments = (element) => {
-    const textSegments = [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Array.from(element.childNodes).forEach((node:any) => {
-      switch (node.nodeType) {
-        case Node.TEXT_NODE:
-          textSegments.push({ text: node.nodeValue, node } as never);
-          break;
-
-        case Node.ELEMENT_NODE:
-          textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
-          break;
-
-        default:
-          throw new Error(`Unexpected node type: ${node.nodeType}`);
-      }
-    });
-    return textSegments;
-  };
+  const [finalResults, setFinalResults] = React.useState('' as string);
 
   const handleFind = () => {
     const findResults = document.getElementById('find-content');
     const textEditor = document.getElementById('text-editor');
     if (findResults && textEditor) {
-      const textSegments = getTextSegments(textEditor);
-      const textContent = textSegments.map(({ text }) => text).join('');
-      const words = textContent.split(/(\s+)/);
-      const output = words.map((word) => {
-        if (word === findTerm) {
-          return `<span style='background-color:yellow'>${word}</span>`;
+      const text = textEditor.textContent as string;
+      const parts = text.split(new RegExp(`(${findTerm})`, 'gi'));
+      const result = parts.map((part) => {
+        if (part === findTerm) {
+          return `<span style='background-color:yellow'>${part}</span>`;
         }
 
-        return word;
-      });
-      const result = output.join('');
+        return part;
+      }).join('');
       findResults.innerHTML = result;
     }
   };
@@ -65,18 +44,26 @@ function FindReplaceModal({ modalOpen, handleModalClose }) {
     const textEditor = document.getElementById('text-editor');
     const replaceResults = document.getElementById('find-content');
     if (replaceResults && textEditor) {
-      const textSegments = getTextSegments(textEditor);
-      const textContent = textSegments.map(({ text }) => text).join('');
-      const words = textContent.split(/(\s+)/);
-      const output = words.map((word) => {
-        if (word === findTerm) {
+      const text = textEditor.textContent as string;
+      const parts = text.split(new RegExp(`(${findTerm})`, 'gi'));
+      const result = parts.map((part) => {
+        if (part === findTerm) {
           return `<span style='background-color:cyan'>${replaceTerm}</span>`;
         }
 
-        return word;
-      });
-      const result = output.join('');
+        return part;
+      }).join('');
       replaceResults.innerHTML = result;
+
+      const afterReplace = parts.map((part) => {
+        if (part === findTerm) {
+          return replaceTerm;
+        }
+
+        return part;
+      }).join('');
+
+      setFinalResults(afterReplace);
     }
   };
 
@@ -180,10 +167,9 @@ function FindReplaceModal({ modalOpen, handleModalClose }) {
               height: '50px',
             }}
             onClick={() => {
-              const findResults = document.getElementById('find-content');
               const textEditor = document.getElementById('text-editor');
-              if (findResults && textEditor) {
-                textEditor.innerHTML = findResults.textContent as string;
+              if (textEditor) {
+                textEditor.innerHTML = finalResults as string;
               }
               handleModalClose();
             }}
@@ -195,7 +181,8 @@ function FindReplaceModal({ modalOpen, handleModalClose }) {
           id="find-content"
           style={{
             padding: '5px',
-            height: '500px',
+            minHeight: '10px',
+            maxHeight: '400px',
             border: '3px solid black',
             borderRadius: '4px',
             fontSize: '16px',
