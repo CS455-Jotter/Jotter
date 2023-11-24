@@ -2,7 +2,6 @@ from fastapi import HTTPException, Depends, APIRouter, Response
 from .. import schemas,utils,models,oauth2
 from sqlalchemy.orm import Session
 from app.database import get_db
-from typing import List
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 
@@ -15,7 +14,7 @@ def create_user(user: schemas.User,db : Session = Depends(get_db)):
     hashpwd = utils.hash(user.password)
     user.password=hashpwd
     db.commit()
-    newUser = models.User(**user.dict())
+    newUser = models.User(**user.model_dump(mode="json"))
     db.add(newUser)
     db.commit()
     db.refresh(newUser)
@@ -46,7 +45,7 @@ def save_state(state : schemas.State,db: Session = Depends(get_db),email:int = D
 
     usernew = schemas.User(email=email,password=user.password)
     usernew.saved_state = state.saved_state
-    user_query.update(usernew.dict(exclude_none=True),synchronize_session=False)
+    user_query.update(usernew.model_dump(mode="json",exclude_none=True),synchronize_session=False)
     db.commit()
     db.close()
 

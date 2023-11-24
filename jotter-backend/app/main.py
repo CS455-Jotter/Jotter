@@ -2,11 +2,6 @@ from fastapi import FastAPI
 from . import models
 from .database import engine
 from .routers import user,auth
-from .config import settings
-from fastapi.exceptions import RequestValidationError
-from fastapi.exceptions import HTTPException
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 
 models.Base.metadata.create_all(bind=engine)

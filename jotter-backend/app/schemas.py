@@ -1,5 +1,4 @@
-from pydantic import BaseModel,EmailStr,conint
-from datetime import datetime
+from pydantic import BaseModel,EmailStr
 from typing import Optional
 
 class User(BaseModel):
@@ -16,13 +15,13 @@ class UserOut(BaseModel):
     email : EmailStr
     saved_state : Optional[str]
     class Config:
-        orm_mode=True   
+        from_attributes=True   
 
 class Token(BaseModel):
     access_token : str
     token_type : str 
     class Config:
-        orm_mode=True
+        from_attributes=True
 
 class TokenData(BaseModel):
     email : Optional[str] = None
