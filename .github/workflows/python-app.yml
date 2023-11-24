@@ -30,14 +30,15 @@ jobs:
         pip install -r jotter-backend/requirements.txt
     - name: Test with pytest
       env:
-        DATABASE_HOSTNAME: ${{ env.DATABASE_HOSTNAME }} 
-        DATABASE_PORT: ${{ env.DATABASE_PORT }} 
-        DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }} 
-        DATABASE_USERNAME: ${{ env.DATABASE_USERNAME }} 
-        DATABASE_NAME: ${{ env.DATABASE_NAME }} 
-        SECRET_KEY: ${{ env.SECRET_KEY }} 
-        ALGORITHM: ${{ env.ALGORITHM }} 
-        ACCESS_TOKEN_EXPIRATION_TIME_MINUTES: ${{ env.ACCESS_TOKEN_EXPIRATION_TIME_MINUTES }} 
-        BASE_URL: ${{ env.BASE_URL }} 
+        DATABASE_HOSTNAME: ${{ vars.DATABASE_HOSTNAME }} 
+        DATABASE_PORT: ${{ vars.DATABASE_PORT }} 
+        DATABASE_PASSWORD: ${{ vars.DATABASE_PASSWORD }} 
+        DATABASE_USERNAME: ${{ vars.DATABASE_USERNAME }} 
+        DATABASE_NAME: ${{ vars.DATABASE_NAME }} 
+        SECRET_KEY: ${{ vars.SECRET_KEY }} 
+        ALGORITHM: ${{ vars.ALGORITHM }} 
+        ACCESS_TOKEN_EXPIRATION_TIME_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRATION_TIME_MINUTES }} 
+        BASE_URL: ${{ vars.BASE_URL }} 
       run: |
+        echo $BASE_URL
         make test
