@@ -19,8 +19,8 @@ class TestDataSave:
 
         # add a valid user into db
         hashpwd = utils.hash(self.password)
-        self.db.add(models.User(email=self.username,password=hashpwd))
-        self.db.commit()
+        db.add(models.User(email=self.username,password=hashpwd))
+        db.commit()
 
         # get the token
         response = requests.post(self.login_url ,data={"username":self.username,"password":self.password})
@@ -30,8 +30,8 @@ class TestDataSave:
         response = requests.put(self.url+"save",headers={"Authorization":f"Bearer {self.token}"},json={"saved_state":self.test_state})
 
         # delete the test user from db
-        self.db.query(models.User).filter(models.User.email==self.username).delete()
-        self.db.commit()
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
 
         db.close()
     
@@ -44,8 +44,8 @@ class TestDataSave:
 
         # add a valid user into db
         hashpwd = utils.hash(self.password)
-        self.db.add(models.User(email=self.username,password=hashpwd))
-        self.db.commit()
+        db.add(models.User(email=self.username,password=hashpwd))
+        db.commit()
 
         # get the token
         response = requests.post(self.login_url ,data={"username":self.username,"password":self.password})
@@ -63,8 +63,8 @@ class TestDataSave:
         db = next(get_db())
 
         # delete the test user from db
-        self.db.query(models.User).filter(models.User.email==self.username).delete()
-        self.db.commit()
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
 
         db.close()
 

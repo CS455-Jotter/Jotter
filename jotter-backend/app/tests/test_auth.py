@@ -17,6 +17,9 @@ class TestUserAuth:
     def test_register_user(self):
         db = next(get_db())
 
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
+
         # check if a user can register
         response = requests.post(self.reg_url,json={"email":self.username,"password":self.password})
 
