@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 
 load_dotenv()
 class Settings():
+    database_username = os.environ.get("DATABASE_USERNAME")
     database_hostname = os.environ.get("DATABASE_HOSTNAME")
     database_port = os.environ.get("DATABASE_PORT")
     database_password = os.environ.get("DATABASE_PASSWORD")
