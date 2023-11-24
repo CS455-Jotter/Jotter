@@ -19,17 +19,30 @@ This folder will contain all the frontend code for the project. The frontend wil
 
 #### UI
 - **Home Page**   
- ![Home Page](assets/home.png)
+<p align="center">
+ <img src="assets/home.png" alt="Home Page" width="500" />
+</p>
+
 - **Login Page**   
- ![Login Page](assets/login.png)
+<p align="center">
+ <img src="assets/login.png" alt="Login Page" width="500" />
+</p>
+
 - **Signup Page**   
- ![SignUp Page](assets/signup.png)
+<p align="center">
+ <img src="assets/signup.png" alt="Signup Page" width="500" />
+</p>
 
 #### Demonstration
 - **Formatting**  
-![Formatting](assets/formatting.gif)
+<p align="center">
+ <img src="assets/formatting.gif" alt="Formatting GIF" width="500" />
+</p>
+
 - **Font size and style**   
-![Font size and style change](assets/fontChange.gif)
+<p align="center">
+ <img src="assets/fontChange.gif" alt="FontChange GIF" width="500" />
+</p>
 
 #### Testing
 Testing is done using Jest and React Testing Library. The tests are written in the `__tests__` folder. The tests are run using the command `yarn test`.
