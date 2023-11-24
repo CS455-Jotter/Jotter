@@ -14,7 +14,7 @@
     "parserOptions": {
       "ecmaVersion": 2015,
       "sourceType": "module",
-      "project": "./tsconfig.json",
+      "project": "**/tsconfig.json",
       "tsconfigRootDir": "jotter-frontend",
       "ecmaFeatures": {
         "tsx": true
