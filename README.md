@@ -32,7 +32,7 @@ The repository will have two major sub-folders;
     <img src="assets/signup.png" alt="Signup Page" width="500" />
     </p>
 
-    #### Demonstration
+3. #### Demonstration
     - **Formatting**  
     <p align="center">
     <img src="assets/formatting.gif" alt="Formatting GIF" width="500" />
@@ -43,10 +43,10 @@ The repository will have two major sub-folders;
     <img src="assets/fontChange.gif" alt="FontChange GIF" width="500" />
     </p>
 
-3. #### Testing
+4. #### Testing
     Testing is done using Jest and React Testing Library. The tests are written in the `__tests__` folder. The tests are run using the command `yarn test`.
 
-4. #### Deployment
+5. #### Deployment
     The frontend is deployed on Vercel and the link is [https://jotter-one.vercel.app/](https://jotter-one.vercel.app/).
 
 ### Jotter-Backend
