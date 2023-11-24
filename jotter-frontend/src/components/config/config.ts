@@ -10,6 +10,6 @@ const colorPalette = {
   grey: '#A9A9A9',
 };
 
-export const baseURL = 'http://127.0.0.1:8000';
+export const baseURL = 'https://jotter-backend.vercel.app';
 
 export default colorPalette;
