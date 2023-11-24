@@ -19,6 +19,7 @@ def create_user(user: schemas.User,db : Session = Depends(get_db)):
     db.add(newUser)
     db.commit()
     db.refresh(newUser)
+    db.close()
 
     return newUser
 
@@ -29,10 +30,11 @@ def create_user(user: schemas.User,db : Session = Depends(get_db)):
 )
 def get_user(db: Session = Depends(get_db),email:int = Depends(oauth2.get_current_user)):
     user = db.query(models.User).filter(models.User.email==email).first()
-    
+    db.close()
     if user == None:
         raise HTTPException(status_code=404, detail=f"User with email = {email} not found")
     response = jsonable_encoder(user)
+
     return response
 
 @router.put(
@@ -46,5 +48,6 @@ def save_state(state : schemas.State,db: Session = Depends(get_db),email:int = D
     usernew.saved_state = state.saved_state
     user_query.update(usernew.dict(exclude_none=True),synchronize_session=False)
     db.commit()
+    db.close()
 
     return Response(status_code=200)
