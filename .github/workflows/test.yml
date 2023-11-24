@@ -1,4 +1,4 @@
-name : Linting Check
+name : Frontend Tests
 
 on : [push, pull_request]
 
@@ -15,9 +15,9 @@ jobs:
           with:
             node-version: '16'
         - run: yarn install
-        - run: yarn lint
+        - run: yarn test:ci
   
-        - name: No linting Errors ✅
+        - name: Tests ✅
           if: ${{ success() }}
           run: |
             curl --request POST \
@@ -25,13 +25,13 @@ jobs:
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'content-type: application/json' \
             --data '{
-              "context": "lint",
+              "context": "tests",
               "state": "success",
               "description": "Tests passed",
               "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             }'
   
-        - name: Linting Errors 🚨
+        - name: Tests 🚨
           if: ${{ failure() }}
           run: |
             curl --request POST \
@@ -39,7 +39,7 @@ jobs:
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'content-type: application/json' \
             --data '{
-              "context": "lint",
+              "context": "tests",
               "state": "failure",
               "description": "Tests failed",
               "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

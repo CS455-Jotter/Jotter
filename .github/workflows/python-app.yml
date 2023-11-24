@@ -29,5 +29,16 @@ jobs:
         pip install flake8 pytest
         pip install -r jotter-backend/requirements.txt
     - name: Test with pytest
+      env:
+        DATABASE_HOSTNAME: ${{ vars.DATABASE_HOSTNAME }} 
+        DATABASE_PORT: ${{ vars.DATABASE_PORT }} 
+        DATABASE_PASSWORD: ${{ vars.DATABASE_PASSWORD }} 
+        DATABASE_USERNAME: ${{ vars.DATABASE_USERNAME }} 
+        DATABASE_NAME: ${{ vars.DATABASE_NAME }} 
+        SECRET_KEY: ${{ vars.SECRET_KEY }} 
+        ALGORITHM: ${{ vars.ALGORITHM }} 
+        ACCESS_TOKEN_EXPIRATION_TIME_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRATION_TIME_MINUTES }} 
+        BASE_URL: ${{ vars.BASE_URL }} 
       run: |
+        echo $BASE_URL
         make test

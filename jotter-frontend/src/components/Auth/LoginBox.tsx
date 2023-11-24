@@ -5,11 +5,10 @@ import {
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
-import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import Input from '../Input/Input';
 import colorPalette, { baseURL } from '../config/config';
@@ -177,25 +176,26 @@ function LoginBox() {
                     >
                       {isLoading ? <CircularProgress style={{ width: '25px', height: '25px', color: 'white' }} /> : <ArrowForwardIcon />}
                     </Button>
-                    <Link href="/signup" style={{ textDecoration: 'none', color: '#ffffff' }}>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          backgroundColor: colorPalette.black,
-                          width: '250px',
-                          height: '40px',
-                          borderRadius: '40px',
-                          ':hover': {
-                            bgcolor: colorPalette.black,
-                            color: 'white',
-                          },
-                          textTransform: 'none',
-                          fontSize: 18,
-                        }}
-                      >
-                        Not a user? Sign up
-                      </Button>
-                    </Link>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: colorPalette.black,
+                        width: '250px',
+                        height: '40px',
+                        borderRadius: '40px',
+                        ':hover': {
+                          bgcolor: colorPalette.black,
+                          color: 'white',
+                        },
+                        textTransform: 'none',
+                        fontSize: 18,
+                      }}
+                      onClick={() => {
+                        router.push('/signup');
+                      }}
+                    >
+                      Not a user? Sign up
+                    </Button>
                   </Stack>
                 </form>
               </FormProvider>
