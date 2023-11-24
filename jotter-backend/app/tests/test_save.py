@@ -6,7 +6,7 @@ from app.config import settings
 class TestDataSave:
     
     url =  settings.base_url + "/users/"
-    login_url = settings.base_url + "/login"
+    login_url = settings.base_url + "/login/"
 
     username = "testuser@jotter.com"
     password = "testpassword"
@@ -24,7 +24,7 @@ class TestDataSave:
         db.commit()
         db.add(models.User(email=self.username,password=hashpwd))
         db.commit()
-        db.close_all()
+        db.close()
 
         try :
             # get the token
@@ -32,7 +32,7 @@ class TestDataSave:
             self.token = response.json()["access_token"]
 
             # check if the user can save state
-            response = requests.put(self.url+"/save",headers={"Authorization":f"Bearer {self.token}"},json={"saved_state":self.test_state})
+            response = requests.put(self.url+"save",headers={"Authorization":f"Bearer {self.token}"},json={"saved_state":self.test_state})
         finally:
             # delete the test user from db
             db = next(get_db())
@@ -54,7 +54,7 @@ class TestDataSave:
         db.commit()
         db.add(models.User(email=self.username,password=hashpwd))
         db.commit()
-        db.close_all()
+        db.close()
 
         try:
             # get the token
@@ -63,7 +63,7 @@ class TestDataSave:
 
 
             # check if the user can save state
-            response = requests.put(self.url+"/save",headers={"Authorization":f"Bearer {self.token}"},json={"saved_state":self.test_state})
+            response = requests.put(self.url+"save/",headers={"Authorization":f"Bearer {self.token}"},json={"saved_state":self.test_state})
             assert response.status_code == 200
 
             # check if the saved state is correct
@@ -84,13 +84,13 @@ class TestDataSave:
     
     def test_save_state_without_token(self):
         # check if the user can save state without token
-        response = requests.put(self.url+"/save",json={"saved_state":"teststate"})
+        response = requests.put(self.url+"save/",json={"saved_state":"teststate"})
 
         assert response.status_code == 401
     
 
     def test_save_state_with_wrong_token(self):
         # check if the user can save state with wrong token
-        response = requests.put(self.url+"/save",headers={"Authorization":f"Bearer {self.wrong_token}"},json={"saved_state":"teststate"})
+        response = requests.put(self.url+"save/",headers={"Authorization":f"Bearer {self.wrong_token}"},json={"saved_state":"teststate"})
 
         assert response.status_code == 401

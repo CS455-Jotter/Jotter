@@ -24,7 +24,7 @@ def verify_token(token:str, credential_exception):
         email = payload.get("email")
         if email is None:
             raise credential_exception
-        # print(type(id))
+        
         token_data= schemas.TokenData(email=str(email))
         return token_data.email
     except JWTError:

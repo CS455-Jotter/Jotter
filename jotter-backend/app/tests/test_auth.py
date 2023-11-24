@@ -28,7 +28,7 @@ class TestUserAuth:
         db.commit()
 
         # test
-        db.close_all()
+        db.close()
         assert response.status_code == 200
 
     def test_invalid_user_login(self):
@@ -52,7 +52,7 @@ class TestUserAuth:
         db.add(models.User(email=self.username,password=hashpwd))
         db.commit()
 
-        db.close_all()
+        db.close()
 
         try:
             # check if the user can login
@@ -64,7 +64,7 @@ class TestUserAuth:
             db.query(models.User).filter(models.User.email==self.username).delete()
             db.commit()
 
-        db.close_all()
+        db.close()
         # test
         assert response.status_code == 200
 
@@ -79,7 +79,7 @@ class TestUserAuth:
         db.add(models.User(email=self.username,password=hashpwd))
         db.commit()
 
-        db.close_all()
+        db.close()
 
         # get the token
         try :
@@ -95,7 +95,7 @@ class TestUserAuth:
             db.query(models.User).filter(models.User.email==self.username).delete()
             db.commit()
 
-        db.close_all()
+        db.close()
 
         # test
         assert response.status_code == 200
