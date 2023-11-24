@@ -18,13 +18,18 @@ This folder will contain all the frontend code for the project. The frontend wil
 - The `styles` folder will contain all the stylesheets for the project. These are used to apply global styles or specific styles to a component. However we have used inline styles more than the stylesheet.
 
 #### UI
-- Home Page ![Home Page](assets/home.png)
-- Login Page ![Login Page](assets/login.png)
-- Signup Page ![SignUp Page](assets/signup.png)
+- **Home Page**   
+ ![Home Page](assets/home.png)
+- **Login Page**   
+ ![Login Page](assets/login.png)
+- **Signup Page**   
+ ![SignUp Page](assets/signup.png)
 
 #### Demonstration
-- Formatting ![Formatting](assets/formatting.gif)
-- Font size and style ![Font size and style change](assets/fontChange.gif)
+- **Formatting**  
+![Formatting](assets/formatting.gif)
+- **Font size and style**   
+![Font size and style change](assets/fontChange.gif)
 
 #### Testing
 Testing is done using Jest and React Testing Library. The tests are written in the `__tests__` folder. The tests are run using the command `yarn test`.
