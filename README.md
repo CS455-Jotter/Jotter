@@ -8,7 +8,7 @@ The repository will have two major sub-folders;
 
 ### Jotter-Frontend <hr/>
 1. #### Folder Structure
-    This folder will contain all the frontend code for the project. The frontend will be developed using NextJS under the yarn package manager.
+    This folder contains all the frontend code for the project. The frontend is developed using NextJS under the yarn package manager.
 
     - We have all the pages in the `pages` folder. It consists of the home page ( the main text editor ), the login page and the signup page.
 
@@ -49,8 +49,24 @@ The repository will have two major sub-folders;
 5. #### Deployment
     The frontend is deployed on Vercel and the link is [https://jotter-one.vercel.app/](https://jotter-one.vercel.app/).
 
-### Jotter-Backend
-This folder will contain all the backend code for the project. The backend will be developed using fastAPI in Python.
+
+### Jotter-Backend <hr/>
+1. #### Folder Structure
+    This folder contains all the backend code for the project. The backend is developed using fastAPI in Python.
+    - `alembic` folder contains scripts to manage database migrations and management.
+    - `app` folder contains the subfolders and scripts to initialize server, database connections and other helpers.
+    - `app/routers` contain the API endpoint handler functions.
+    - `app/tests` folder contains all the unit tests for all APIs and edge cases.
+2. #### APIs
+    - `POST /login` API lets a user authenticate their emailID and password and provides authorization token with a certain TTL.
+    - `POST /users` API lets a user register themselves providing a valid emailID and password.
+    - `PUT /users/save` API lets an authenticated user with valid token save their work as a string in the database.
+    - `GET /users` API lets an authenticated user with vaild token to retrieve their saved work anytime.
+3. #### Testing
+    To run the tests for backend, use `make test` from base directory. It will display the number testcases Failed/Passed.
+4. #### Deployment
+    The backend is deployed on Vercel and the link is  [jotter-backend.vercel.app](https://jotter-backend.vercel.app/).
+    
 
 
 ## Issues and Tasks
