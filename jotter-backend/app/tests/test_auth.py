@@ -45,15 +45,24 @@ class TestUserAuth:
         db = next(get_db())
         # add a valid user into db
         hashpwd = utils.hash(self.password)
+
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
+        
         db.add(models.User(email=self.username,password=hashpwd))
         db.commit()
 
-        # check if the user can login
-        response = requests.post(self.url,data={"username":self.username,"password":self.password})
+        db.close_all()
 
-        # delete the test user from db
-        db.query(models.User).filter(models.User.email==self.username).delete()
-        db.commit()
+        try:
+            # check if the user can login
+            response = requests.post(self.url,data={"username":self.username,"password":self.password})
+
+        finally:
+            # delete the test user from db
+            db = next(get_db())
+            db.query(models.User).filter(models.User.email==self.username).delete()
+            db.commit()
 
         db.close_all()
         # test
@@ -64,19 +73,27 @@ class TestUserAuth:
         db = next(get_db())
         # add a valid user into db
         hashpwd = utils.hash(self.password)
+        db.query(models.User).filter(models.User.email==self.username).delete()
+        db.commit()
+
         db.add(models.User(email=self.username,password=hashpwd))
         db.commit()
 
+        db.close_all()
+
         # get the token
-        response = requests.post(self.url ,data={"username":self.username,"password":self.password})
-        self.token = response.json()["access_token"]
+        try :
+            response = requests.post(self.url ,data={"username":self.username,"password":self.password})
+            self.token = response.json()["access_token"]
 
-        # check if the user can be fetched from token
-        response = requests.get(self.reg_url,headers={"Authorization":f"Bearer {self.token}"})
+            # check if the user can be fetched from token
+            response = requests.get(self.reg_url,headers={"Authorization":f"Bearer {self.token}"})
 
-        # delete the test user from db
-        db.query(models.User).filter(models.User.email==self.username).delete()
-        db.commit()
+        finally:
+            # delete the test user from db
+            db = next(get_db())
+            db.query(models.User).filter(models.User.email==self.username).delete()
+            db.commit()
 
         db.close_all()
 
